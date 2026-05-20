@@ -148,7 +148,8 @@ const AuthorDashboard = () => {
       setAttachments([]);
     } catch (error) {
       console.error('Error creating ticket:', error);
-      showToast('Failed to submit ticket.', 'error');
+      const serverMsg = error.response?.data?.message || 'Failed to submit ticket.';
+      showToast(`Failed to submit ticket: ${serverMsg}`, 'error');
     } finally {
       setSubmittingTicket(false);
     }

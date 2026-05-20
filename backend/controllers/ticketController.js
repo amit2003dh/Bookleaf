@@ -44,8 +44,7 @@ const createTicket = async (req, res) => {
     ticketData.aiDraftResponse = aiDraft;
 
     // 5. Save Ticket to DB
-    const ticket = new Ticket(ticketData);
-    await ticket.save();
+    const ticket = await Ticket.create(ticketData);
 
     // 6. Broadcast via Socket.io
     const io = req.app.get('io');
@@ -59,7 +58,11 @@ const createTicket = async (req, res) => {
     return res.status(201).json(ticket);
   } catch (error) {
     console.error('Create ticket error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString(),
+      stack: error.stack 
+    });
   }
 };
 
@@ -133,7 +136,10 @@ const getTickets = async (req, res) => {
     return res.json(tickets);
   } catch (error) {
     console.error('Fetch tickets error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 
@@ -165,7 +171,10 @@ const getTicketById = async (req, res) => {
     });
   } catch (error) {
     console.error('Fetch ticket details error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 
@@ -215,7 +224,10 @@ const updateTicket = async (req, res) => {
     return res.json(ticket);
   } catch (error) {
     console.error('Update ticket error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 
@@ -274,7 +286,10 @@ const addReply = async (req, res) => {
     return res.json(ticket);
   } catch (error) {
     console.error('Add reply error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 
@@ -306,7 +321,10 @@ const generateAiDraft = async (req, res) => {
     return res.json({ aiDraftResponse: aiDraft });
   } catch (error) {
     console.error('Regenerate AI Draft error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 

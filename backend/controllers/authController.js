@@ -36,7 +36,10 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 
@@ -78,7 +81,10 @@ const registerUser = async (req, res) => {
     }
   } catch (error) {
     console.error('Registration error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 
@@ -92,7 +98,10 @@ const getMe = async (req, res) => {
     return res.json(user);
   } catch (error) {
     console.error('Profile fetch error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 

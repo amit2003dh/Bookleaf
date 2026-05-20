@@ -15,7 +15,10 @@ const getBooks = async (req, res) => {
     return res.json(books);
   } catch (error) {
     console.error('Fetch books error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Server error',
+      error: error.toString()
+    });
   }
 };
 
