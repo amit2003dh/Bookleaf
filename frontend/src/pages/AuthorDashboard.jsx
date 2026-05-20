@@ -129,11 +129,14 @@ const AuthorDashboard = () => {
 
     setSubmittingTicket(true);
     try {
-      const res = await axios.post('/api/tickets', {
-        bookId: newTicketBook,
+      const ticketPayload = {
         subject: newTicketSubject,
         description: newTicketDescription,
-      });
+      };
+      if (newTicketBook && newTicketBook !== 'General / Account Level') {
+        ticketPayload.bookId = newTicketBook;
+      }
+      const res = await axios.post('/api/tickets', ticketPayload);
 
       setTickets((prev) => [res.data, ...prev]);
       showToast('Ticket submitted! AI classification complete.', 'success');
