@@ -1,5 +1,22 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
+// Helper to safely format dates from either Mongoose (Date object) or JSON DB (string)
+const formatDate = (date) => {
+  if (!date) return 'None';
+  try {
+    if (typeof date === 'string') {
+      return date.split('T')[0];
+    }
+    if (typeof date.toISOString === 'function') {
+      return date.toISOString().split('T')[0];
+    }
+    const parsed = new Date(date);
+    return isNaN(parsed.getTime()) ? String(date) : parsed.toISOString().split('T')[0];
+  } catch (error) {
+    return String(date);
+  }
+};
+
 // Initialize Gemini API client if API key is present
 const getGenAIModel = () => {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -177,7 +194,7 @@ Total Copies Sold: ${book.totalCopiesSold}
 Total Royalty Earned: ₹${book.totalRoyaltyEarned}
 Royalty Paid: ₹${book.royaltyPaid}
 Royalty Pending: ₹${book.royaltyPending}
-Last Royalty Payout Date: ${book.lastRoyaltyPayoutDate ? book.lastRoyaltyPayoutDate.toISOString().split('T')[0] : 'None'}
+Last Royalty Payout Date: ${formatDate(book.lastRoyaltyPayoutDate)}
 Print Partner: ${book.printPartner || 'None'}
 Available On: ${book.availableOn ? book.availableOn.join(', ') : 'None'}
 `;
